@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            outline: 0;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14px;
+            color: #000;
+        }
+        section {
+            display: flex;
+            justify-content: center;
+            margin-top: 80px;
+        }
+        button {
+            padding: 8px;
+            margin: 0 4px;
+            border: 0;
+        }
+        </style>
+        <title>Canvas ECG display</title>
+    </head>
+    <body>
+        <section>
+            <canvas></canvas>
+        </section>
+        <script src="ecg.js"></script>
+        <section>
+            <button onclick="ecg.setRhythm('disconnected')">disconnected leads</button>
+            <button onclick="ecg.setRhythm('asystole')">asystole</button>
+            <button onclick="ecg.setTrembling(true)">trembling on</button>
+            <button onclick="ecg.setTrembling(false)">trembling off</button>
+        </section>
+    </body>
+</html>
