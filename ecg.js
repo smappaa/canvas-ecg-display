@@ -17,6 +17,9 @@ function Ecg() {
     this.trembling = false;
     this.tremblingLevel = 0;
     this.tremblingDirection = 1;
+    this.hr = 60;
+    this.lastHeartBeatTime = Date.now() / 1000;
+    this.drawingComplex = false;
 
     this.setRhythm = (rhythm) => {
         this.rhythm = rhythm;
@@ -24,6 +27,10 @@ function Ecg() {
 
     this.setTrembling = (trembling) => {
         this.trembling = trembling;
+    }
+
+    this.setHr = (hr) => {
+        this.hr = hr;
     }
 
     this.draw = () => {
@@ -66,6 +73,13 @@ function Ecg() {
         } else {
             this.lineX += 2;
         }
+
+        var timeNow = Date.now() / 1000;
+        if(timeNow - this.lastHeartBeatTime > (60 / this.hr)) {
+            console.log("Heartbeat");
+            this.lastHeartBeatTime = timeNow;
+        }
+
         this.draw();
     }
 

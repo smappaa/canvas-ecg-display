@@ -17,10 +17,14 @@
             justify-content: center;
             margin-top: 80px;
         }
-        button {
+        button, input[type=text] {
             padding: 8px;
             margin: 0 4px;
             border: 0;
+        }
+        input[type=text] {
+            box-shadow: 0 0 0 1px #ccc inset;
+            max-width: 50px;
         }
         </style>
         <title>Canvas ECG display</title>
@@ -35,6 +39,7 @@
             <button onclick="ecg.setRhythm('asystole')">asystole</button>
             <button onclick="ecg.setTrembling(true)">trembling on</button>
             <button onclick="ecg.setTrembling(false)">trembling off</button>
+            <label>HR: <input type="text" oninput="ecg.setHr(this.value)" value=60></label>
         </section>
     </body>
 </html>
