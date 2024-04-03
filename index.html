@@ -3,43 +3,40 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-        * {
-            margin: 0;
-            padding: 0;
-            outline: 0;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 14px;
-            color: #000;
-        }
-        section {
-            display: flex;
-            justify-content: center;
-            margin-top: 80px;
-        }
-        button, input[type=text] {
-            padding: 8px;
-            margin: 0 4px;
-            border: 0;
-        }
-        input[type=text] {
-            box-shadow: 0 0 0 1px #ccc inset;
-            max-width: 50px;
-        }
-        </style>
+        <link rel="stylesheet" href="styles/main.css">
         <title>Canvas ECG display</title>
     </head>
     <body>
-        <section>
+        <div id="wrapper">
+            <button id="pauseBtn" onclick="togglePause(this)" title="Pause/unpause"></button>
             <canvas></canvas>
-        </section>
-        <script src="ecg.js"></script>
-        <section>
-            <button onclick="ecg.setRhythm('disconnected')">disconnected leads</button>
-            <button onclick="ecg.setRhythm('asystole')">asystole</button>
-            <button onclick="ecg.setTrembling(true)">trembling on</button>
-            <button onclick="ecg.setTrembling(false)">trembling off</button>
-            <label>HR: <input type="text" oninput="ecg.setHr(this.value)" value=60></label>
-        </section>
+            <script src="scripts/ecg.js"></script>
+            <script>
+                togglePause = (e) => {
+                    if(paused) {
+                        paused = false;
+                        e.classList.remove("active");
+                    } else {
+                        paused = true;
+                        e.classList.add("active");
+                    }
+                }
+            </script>
+            <div id="controls">
+                <section>
+                    <h2>Rhythms</h2>
+                    <div><label for="rhythm-dc">Disconnected leads</label> <input id="rhythm-dc" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="disconnected" checked></div>
+                    <div><label for="rhythm-asystole">Asystole</label> <input id="rhythm-asystole" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="asystole"></div>
+                </section>
+                <section>
+                    <h2>Artifacts</h2>
+                    <div><label for="artifacts-tension">Muscle tension</label> <input id="artifacts-tension" type="checkbox" name="artifact" onchange="ecg.setTension(this.checked)"></div>
+                </section>
+                <section>
+                    <h2>Heart rate</h2>
+                    <div><input id="hr" type="number" name="hr" oninput="ecg.setHr(this.value)" value=60></div>
+                </section>
+            </div>
+        </div>
     </body>
 </html>

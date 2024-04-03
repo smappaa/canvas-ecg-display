@@ -14,9 +14,9 @@ function Ecg() {
     this.rhythm = "disconnected";
     this.baselineWander = 0;
     this.baselineWanderDirection = 1;
-    this.trembling = false;
-    this.tremblingLevel = 0;
-    this.tremblingDirection = 1;
+    this.tension = false;
+    this.tensionLevel = 0;
+    this.tensionDirection = 1;
     this.hr = 60;
     this.lastHeartBeatTime = Date.now() / 1000;
     this.drawingComplex = false;
@@ -25,8 +25,8 @@ function Ecg() {
         this.rhythm = rhythm;
     }
 
-    this.setTrembling = (trembling) => {
-        this.trembling = trembling;
+    this.setTension = (tension) => {
+        this.tension = tension;
     }
 
     this.setHr = (hr) => {
@@ -52,8 +52,8 @@ function Ecg() {
                 y += Math.random() * 3.5 - 1.75;
             }
 
-            // Patient trembling effect
-            y += this.tremblingEffect();
+            // Patient muscle tension effect
+            y += this.tensionEffect();
         }
         
         y += this.lineY;
@@ -96,34 +96,35 @@ function Ecg() {
         }
     }
 
-    this.tremblingEffect = () => {
-        if(this.trembling && Math.random() * 100 > 10) {
+    this.tensionEffect = () => {
+        if(this.tension && Math.random() * 100 > 10) {
             if(Math.floor(Math.random()* 6) == 0) {
-                this.tremblingDirection = this.tremblingDirection ? 0 : 1;
+                this.tensionDirection = this.tensionDirection ? 0 : 1;
             }
-            if(this.tremblingLevel >= 4) {
-                this.tremblingDirection = 0;
-            } else if(this.tremblingLevel <= -4) {
-                this.tremblingDirection = 1;
+            if(this.tensionLevel >= 2) {
+                this.tensionDirection = 0;
+            } else if(this.tensionLevel <= -2) {
+                this.tensionDirection = 1;
             }
-            if(this.tremblingDirection == 1) {
-                this.tremblingLevel += Math.random() * 3.5 + 6.5;
-            } else if(this.tremblingDirection == 0) {
-                this.tremblingLevel -= Math.random() * 3.5 + 6.5;
+            if(this.tensionDirection == 1) {
+                this.tensionLevel += Math.random() * 5.5 + 6.5;
+            } else if(this.tensionDirection == 0) {
+                this.tensionLevel -= Math.random() * 5.5 + 6.5;
             }
             if(Math.floor(Math.random()* 12) == 0) {
-                this.tremblingLevel = this.tremblingLevel * 1.5;
+                this.tensionLevel = this.tensionLevel * 1.5;
             }
-            return this.tremblingLevel;
+            return this.tensionLevel;
         } else return 0;
     }
 }
 
 var ecg = new Ecg();
+var paused = false;
 
 function animate() {
     requestAnimationFrame(animate);
-    ecg.update();
+    if(!paused) ecg.update();
 }
 
 animate();

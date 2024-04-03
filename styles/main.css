@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+body {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 40px;
+    background-color: rgb(217, 227, 217);
+}
+#wrapper {
+    position: relative;
+    background-color: #fff;
+}
+canvas, #controls {
+    max-width: 1000px;
+}
+#pauseBtn {
+    position: absolute;
+    display: block;
+    width: 24px;
+    height: 24px;
+    top: 10px;
+    right: 10px;
+    padding: 0;
+    border: 1px solid #777;
+    border-radius: 2px;
+    background-color: rgba(0,0,0,0);
+    cursor: pointer;
+}
+#pauseBtn:before, #pauseBtn:after {
+    position: absolute;
+    content: "";
+    width: 4px;
+    height: 12px;
+    top: 5px;
+    left: 6px;
+    background-color: #777;
+}
+#pauseBtn:after {
+    left: 13px;
+}
+#pauseBtn:hover {
+    border-color: #aaa;
+}
+#pauseBtn:hover:before, #pauseBtn:hover:after {
+    background-color: #aaa;
+}
+#pauseBtn.active {
+    border-color: #1b9cdd;
+}
+#pauseBtn.active:before, #pauseBtn.active:after {
+    background-color: #1b9cdd;
+}
+#controls {
+    display: flex;
+    justify-content: space-around;
+    gap: 40px;
+    margin: 40px;
+}
+#controls > section {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+}
+#controls > section:last-child {
+    flex-grow: .3;
+}
+#controls > section > h2, #controls > section > div {
+    position: relative;
+    width: 100%;
+    align-items: flex-start;
+}
+#controls > section > h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    cursor: default;
+    user-select: none;
+}
+#controls > section > div > label {
+    display: inline-block;
+    width: 100%;
+    line-height: 35px;
+    user-select: none;
+}
+input[type=radio], input[type=checkbox] {
+    position: absolute;
+    left: 250px;
+    vertical-align: middle;
+    height: 100%;
+}
+#hr {
+    width: 100px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #555;
+    border: 2px solid #e6e6e6;
+    transition: .05s all ease-out;
+}
+#hr:focus {
+    border: 2px solid #8bdd8d;
+}
+#hr::selection {
+    background: #9bdc9d;
+}
+
+@media only screen and (max-width: 900px) {
+    #controls > section > div > label {
+        display: inline;
+    }
+    input[type=radio], input[type=checkbox] {
+        position: relative;
+        left: 0;
+        margin-left: 20px;
+    }
+  }
