@@ -25,12 +25,16 @@
             <div id="controls">
                 <section>
                     <h2>Rhythms</h2>
-                    <div><label for="rhythm-dc">Disconnected leads</label> <input id="rhythm-dc" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="disconnected" checked></div>
+                    <div><label for="rhythm-afib">Atrial fibrillation</label> <input id="rhythm-afib" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="afib"></div>
                     <div><label for="rhythm-asystole">Asystole</label> <input id="rhythm-asystole" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="asystole"></div>
+                    <div><label for="rhythm-dc">Disconnected leads</label> <input id="rhythm-dc" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="disconnected"></div>
+                    <div><label for="rhythm-sinus">Sinus</label> <input id="rhythm-sinus" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="sinus" checked></div>
                 </section>
                 <section>
                     <h2>Artifacts</h2>
+                    <div><label for="artifacts-baselineWander">Baseline wander</label> <input id="artifacts-baselineWander" type="checkbox" name="artifact" onchange="ecg.setBaselineWander(this.checked)" checked></div>
                     <div><label for="artifacts-tension">Muscle tension</label> <input id="artifacts-tension" type="checkbox" name="artifact" onchange="ecg.setTension(this.checked)"></div>
+                    <div><label for="artifacts-rattling">Rattling</label> <input id="artifacts-rattling" type="checkbox" name="artifact" onchange="ecg.setRattling(this.checked)" checked></div>
                 </section>
                 <section>
                     <h2>Heart rate</h2>

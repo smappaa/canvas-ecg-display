@@ -11,22 +11,36 @@ function Ecg() {
     this.lineX = 0;
     this.lineY = 0;
     this.prevYpos = 100;
-    this.rhythm = "disconnected";
+    this.rhythm = "sinus";
+    this.baselineWanderOn = true;
     this.baselineWander = 0;
     this.baselineWanderDirection = 1;
     this.tension = false;
     this.tensionLevel = 0;
     this.tensionDirection = 1;
+    this.rattling = true;
     this.hr = 60;
     this.lastHeartBeatTime = Date.now() / 1000;
     this.drawingComplex = false;
+    this.complexParts = [];
+    this.currentComplexStep = 0;
+    this.prevComplexDrawTime = 0;
+    this.yGlide = 100;
 
     this.setRhythm = (rhythm) => {
         this.rhythm = rhythm;
     }
 
+    this.setBaselineWander = (baselineWanderOn) => {
+        this.baselineWanderOn = baselineWanderOn;
+    }
+
     this.setTension = (tension) => {
         this.tension = tension;
+    }
+
+    this.setRattling = (rattling) => {
+        this.rattling = rattling;
     }
 
     this.setHr = (hr) => {
@@ -44,20 +58,29 @@ function Ecg() {
 
         // Applying artifacts
         if(this.rhythm !== "disconnected") {
+            // Drawing rhythms
+            if(this.drawingComplex) {
+                y = this.drawComplex(this.rhythm);
+            }
+
             // Baseline wander
-            y += this.baselineWander;
+            if(this.baselineWanderOn) y += this.baselineWander;
             
             // Rattling
-            if(Math.floor(Math.random() * 40) == 0) {
-                y += Math.random() * 3.5 - 1.75;
+            if(this.rattling) {
+                if(Math.floor(Math.random() * 40) == 0) {
+                    y += Math.random() * 3.5 - 1.75;
+                }
             }
 
             // Patient muscle tension effect
             y += this.tensionEffect();
-        }
-        
+
+            if(this.yGlide < 120) this.yGlide += .05;
+        } else if(this.yGlide != 100) this.yGlide = 100;
+
         y += this.lineY;
-        y += 100;
+        y += this.yGlide;
         c.moveTo(this.lineX, this.prevYpos);
         c.lineTo(this.lineX+2, y);
         c.strokeStyle = "#0f0";
@@ -75,8 +98,11 @@ function Ecg() {
         }
 
         var timeNow = Date.now() / 1000;
-        if(timeNow - this.lastHeartBeatTime > (60 / this.hr)) {
-            console.log("Heartbeat");
+        if(timeNow - this.lastHeartBeatTime > (60 / this.hr) 
+        || this.rhythm == "afib" && Math.random() * 100 > 99) {
+            this.drawingComplex = true;
+            this.complexParts = [];
+            this.currentComplexStep = 0;
             this.lastHeartBeatTime = timeNow;
         }
 
@@ -101,9 +127,9 @@ function Ecg() {
             if(Math.floor(Math.random()* 6) == 0) {
                 this.tensionDirection = this.tensionDirection ? 0 : 1;
             }
-            if(this.tensionLevel >= 2) {
+            if(this.tensionLevel >= 1) {
                 this.tensionDirection = 0;
-            } else if(this.tensionLevel <= -2) {
+            } else if(this.tensionLevel <= -1) {
                 this.tensionDirection = 1;
             }
             if(this.tensionDirection == 1) {
@@ -116,6 +142,34 @@ function Ecg() {
             }
             return this.tensionLevel;
         } else return 0;
+    }
+
+    this.drawComplex = (complex) => {
+        var toReturn = 0;
+        if(this.complexParts.length == 0) {
+            switch(complex) {
+                case "sinus": this.complexParts = [-1, -4, -7, -4, 0, 0, 0, 1, -55, 3, 1, 0, 0, 0, -3, -5, -7, -7, -5, -3, 
+                    0, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 4.5, 4.5, 4.5, 4.5, 4.5, 4, 4, 4, 4, 4, 3.5, 3.5, 3.5, 3.5, 3.5, 3, 3, 
+                    3, 2.5, 2.5, 2.5, 2, 2, 2, 1.5, 1.5, 1.5, 1.5, 1, 1, 1, 1, .5, .5, .5, .5];
+                break;
+                case "afib": this.complexParts = [-1, 3, -2, 2, 0, 3, -3, 1, -55, 3, -3, 2, 3, 1, -4, -5, -7, -5, -2, -3];
+                for(var i = 0; i < 60; i++) {
+                    this.complexParts.push(Math.floor(Math.random() * 11) - 5.5);
+                }
+                break;
+            }
+        } else if(this.complexParts.length > 0) {
+            if(this.currentComplexStep < this.complexParts.length) {
+                    toReturn = this.complexParts[this.currentComplexStep];
+                    this.currentComplexStep++;
+            } else {
+                this.drawingComplex = false;
+                this.complexParts = [];
+                this.currentComplexStep = 0;
+            }
+        }
+
+        return toReturn;
     }
 }
 

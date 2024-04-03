@@ -97,6 +97,7 @@ input[type=radio], input[type=checkbox] {
     height: 100%;
 }
 #hr {
+    position: relative;
     width: 100px;
     padding: 10px;
     font-weight: bold;
