@@ -1,3 +1,12 @@
+/**
+ * CANVAS ECG DISPLAY
+ * Experimentation with canvas - an attempt to produce something meaningful with it.
+ * 
+ * Author: Samuli Puolakka / @smappaa on GitHub
+ * Date: March 31st to April 4th 2024
+ * License: MIT
+ */
+
 var canvas = document.querySelector("canvas");
 var c = canvas.getContext("2d");
 
@@ -48,7 +57,6 @@ function Ecg() {
     }
 
     this.draw = () => {
-        // Erasing previous line
         c.fillStyle = "#000";
         c.fillRect(this.lineX, 0, 20, canvas.height);
         c.fill();
@@ -56,25 +64,20 @@ function Ecg() {
 
         var y = 0;
 
-        // Applying artifacts
         if(this.rhythm !== "disconnected") {
-            // Drawing rhythms
             if(this.drawingComplex) {
                 y = this.drawComplex(this.rhythm);
             }
 
-            // Baseline wander
             if(this.baselineWanderOn) y += this.baselineWander;
-            
-            // Rattling
+
             if(this.rattling) {
                 if(Math.floor(Math.random() * 40) == 0) {
                     y += Math.random() * 3.5 - 1.75;
                 }
             }
 
-            // Patient muscle tension effect
-            y += this.tensionEffect();
+            y += this.chaoticEffect();
 
             if(this.yGlide < 120) this.yGlide += .05;
         } else if(this.yGlide != 100) this.yGlide = 100;
@@ -122,20 +125,22 @@ function Ecg() {
         }
     }
 
-    this.tensionEffect = () => {
-        if(this.tension && Math.random() * 100 > 10) {
+    this.chaoticEffect = () => {
+        var levels = this.rhythm == "vfib" ? [7, -7] : [1, -1];
+        var multipliers = this.rhythm == "vfib" ? [3.5, 1] : [5.5, 6.5];
+        if((this.tension || this.rhythm == "vfib") && Math.random() * 100 > 10) {
             if(Math.floor(Math.random()* 6) == 0) {
                 this.tensionDirection = this.tensionDirection ? 0 : 1;
             }
-            if(this.tensionLevel >= 1) {
+            if(this.tensionLevel >= levels[0]) {
                 this.tensionDirection = 0;
-            } else if(this.tensionLevel <= -1) {
+            } else if(this.tensionLevel <= levels[1]) {
                 this.tensionDirection = 1;
             }
             if(this.tensionDirection == 1) {
-                this.tensionLevel += Math.random() * 5.5 + 6.5;
+                this.tensionLevel += Math.random() * multipliers[0] + multipliers[1];
             } else if(this.tensionDirection == 0) {
-                this.tensionLevel -= Math.random() * 5.5 + 6.5;
+                this.tensionLevel -= Math.random() * multipliers[0] + multipliers[1];
             }
             if(Math.floor(Math.random()* 12) == 0) {
                 this.tensionLevel = this.tensionLevel * 1.5;
@@ -154,8 +159,15 @@ function Ecg() {
                 break;
                 case "afib": this.complexParts = [-1, 3, -2, 2, 0, 3, -3, 1, -55, 3, -3, 2, 3, 1, -4, -5, -7, -5, -2, -3];
                 for(var i = 0; i < 60; i++) {
-                    this.complexParts.push(Math.floor(Math.random() * 11) - 5.5);
+                    this.complexParts.push(Math.floor(Math.random() * 7) - 3.5);
                 }
+                break;
+                case "vtach":
+                var r1 = Math.random() * 2.5 - 1.25;
+                var r2 = Math.random() * 1 - .5;
+                this.complexParts = [-3 + r2, -9 + r2, -16 + r1, -23 + r2, -30 + r1, -37 + r2, -45 + r1, -51 + r2, -58 + r1,
+                    -62 + r2, -65 + r1, -61 + r2, -57 + r1, -50 + r2, -45 + r1, -39 + r2, -25 + r1, -10 + r2, -2 + r1, 3 + r2,
+                    4 + r1, 4 + r2, 5 + r1, 4 + r2, 4 + r1, 2 + r2];
                 break;
             }
         } else if(this.complexParts.length > 0) {
@@ -176,7 +188,7 @@ function Ecg() {
 var ecg = new Ecg();
 var paused = false;
 
-function animate() {
+animate = () => {
     requestAnimationFrame(animate);
     if(!paused) ecg.update();
 }

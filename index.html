@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles/main.css">
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
         <title>Canvas ECG display</title>
     </head>
     <body>
@@ -21,14 +22,27 @@
                         e.classList.add("active");
                     }
                 }
+                changeRhythm = (rhythm) => {
+                    ecg.setRhythm(rhythm);
+                    var hr = 0;
+                    switch(rhythm) {
+                        case "afib": hr = 110; break;
+                        case "sinus": hr = 60; break;
+                        case "vtach": hr = 200;
+                    }
+                    ecg.setHr(hr);
+                    document.getElementById("hr").value = hr;
+                }
             </script>
             <div id="controls">
                 <section>
                     <h2>Rhythms</h2>
-                    <div><label for="rhythm-afib">Atrial fibrillation</label> <input id="rhythm-afib" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="afib"></div>
-                    <div><label for="rhythm-asystole">Asystole</label> <input id="rhythm-asystole" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="asystole"></div>
-                    <div><label for="rhythm-dc">Disconnected leads</label> <input id="rhythm-dc" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="disconnected"></div>
-                    <div><label for="rhythm-sinus">Sinus</label> <input id="rhythm-sinus" type="radio" name="rhythm" onchange="ecg.setRhythm(this.value)" value="sinus" checked></div>
+                    <div><label for="rhythm-afib">Atrial fibrillation</label> <input id="rhythm-afib" type="radio" name="rhythm" onchange="changeRhythm(this.value)" value="afib"></div>
+                    <div><label for="rhythm-asystole">Asystole</label> <input id="rhythm-asystole" type="radio" name="rhythm" onchange="changeRhythm(this.value)" value="asystole"></div>
+                    <div><label for="rhythm-dc">Disconnected leads</label> <input id="rhythm-dc" type="radio" name="rhythm" onchange="changeRhythm(this.value)" value="disconnected"></div>
+                    <div><label for="rhythm-sinus">Sinus</label> <input id="rhythm-sinus" type="radio" name="rhythm" onchange="changeRhythm(this.value)" value="sinus" checked></div>
+                    <div><label for="rhythm-vfib">Ventricular fibrillation</label> <input id="rhythm-vfib" type="radio" name="rhythm" onchange="changeRhythm(this.value)" value="vfib"></div>
+                    <div><label for="rhythm-vtach">Ventricular tachycardia</label> <input id="rhythm-vtach" type="radio" name="rhythm" onchange="changeRhythm(this.value)" value="vtach"></div>
                 </section>
                 <section>
                     <h2>Artifacts</h2>
