@@ -69,7 +69,7 @@ class Ecg {
 
         if (this.rhythm !== "disconnected") {
             if (this.drawingComplex) {
-                y += this.computeComplex(this.rhythm);
+                y += this.computeComplex();
             }
 
             if (this.tension || this.rhythm == "vfib") {
@@ -93,10 +93,10 @@ class Ecg {
         this.draw(y);
     }
 
-    computeComplex(complex) {
+    computeComplex() {
         let toReturn = 0;
         if (this.complexParts.length == 0) {
-            switch (complex) {
+            switch (this.rhythm) {
                 case "sinus": this.complexParts = [-1, -4, -7, -4, 0, 0, 0, 1, -55, 3, 1, 0, 0, 0, -3, -5, -7, -7, -5, -3,
                     0, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 4.5, 4.5, 4.5, 4.5, 4.5, 4, 4, 4, 4, 4, 3.5, 3.5, 3.5, 3.5, 3.5, 3, 3,
                     3, 2.5, 2.5, 2.5, 2, 2, 2, 1.5, 1.5, 1.5, 1.5, 1, 1, 1, 1, .5, .5, .5, .5];
